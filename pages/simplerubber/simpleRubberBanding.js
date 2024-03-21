@@ -6,9 +6,13 @@ const stage = new Konva.Stage({
   width: 400,
   height: 400
 });
-// Une couche pour dessiner (il peut y en avoir plusieurs)
-const layer = new Konva.Layer();
-stage.add(layer);
+// Une couche pour la ligne en cours de dessin (il peut y en avoir plusieurs)
+const temporaire = new Konva.Layer();
+// Une couche pour les lignes déjà dessinées
+const dessin = new Konva.Layer();
+stage.add(dessin);
+stage.add(temporaire);
+
 
 let rubber; // La ligne provisoire
 
@@ -52,7 +56,7 @@ function createLine(event) {
       stroke: 'red',
       strokeWidth: 2
   });
-  layer.add(rubber);
+  temporaire.add(rubber);
 }
 /**
 * Modifie le second point de la ligne.
@@ -61,9 +65,14 @@ function createLine(event) {
 function setLastPoint(event) {
   const pos = stage.getPointerPosition();
   rubber.points([rubber.points()[0], rubber.points()[1], pos.x, pos.y]);
-  layer.batchDraw();
+  temporaire.batchDraw();
 }
 
+/**
+* Enregistre la ligne provisoire dans le dessin.
+*/
 function saveLine() {
-  // On enregistre la ligne quelque part
+    rubber.remove(); // On l'enlève de la couche temporaire
+    rubber.stroke("black"); // On change la couleur
+    dessin.add(rubber); // On l'ajoute à la couche de dessin
 }
