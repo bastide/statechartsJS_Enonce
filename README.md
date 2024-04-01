@@ -30,7 +30,7 @@ Les événement à traiter dans le statechart sont les suivants :
 ## Eléments de solution
 Le code à développer se trouve dans le répertoire `pages/xstatepolyline` (javascript + html). Le code javascript contient les actions et les préconditions (guards) dont vous avez besoin dans le statechart.
 
-Vous pouvez vous inspirer du code dans le répertoire `pages/xrubber` pour un exemple.
+Vous pouvez vous inspirer du code dans le répertoire `pages/xstaterubber` pour un exemple.
 
 Le code utilise la bibliothèque [Konva](https://konvajs.org/docs/index.html) pour le dessin des points et des lignes.
 
