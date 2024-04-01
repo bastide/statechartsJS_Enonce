@@ -21,11 +21,11 @@ Implémenter avec la bibliothèque xState un statechart qui trace une "polyline"
 
 
 Les événement à traiter dans le statechart sont les suivants :
-* MOUSECLICK ajoute un point (jusqu'au maximum MAX fixé)
-* MOUSEMOVE déplace le point provisoire
-* Backspace efface le dernier point ajouté (sauf le premier)
-* Enter enregistre la polyline (2 ≤ nombre de points ≤ MAX)
-* Escape abandonne le tracé de la polyline
+* `MOUSECLICK` ajoute un point (jusqu'au maximum MAX fixé)
+* `MOUSEMOVE` déplace le point provisoire
+* `Backspace` efface le dernier point ajouté (sauf le premier)
+* `Enter` enregistre la polyline (2 ≤ nombre de points ≤ MAX)
+* `Escape` abandonne le tracé de la polyline
 
 ## Eléments de solution
 Le code à développer se trouve dans le répertoire `pages/xstatepolyline` (javascript + html). Le code javascript contient les actions et les préconditions (guards) dont vous avez besoin dans le statechart.
