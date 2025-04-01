@@ -1,9 +1,6 @@
 import Konva from "konva";
-import { createMachine, interpret } from "xstate";
-import { inspect } from "@xstate/inspect";
-inspect({
-  iframe: () => document.querySelector('iframe[data-xstate]')
-});
+import { createMachine, createActor } from 'xstate';
+import { createBrowserInspector } from '@statelyai/inspect';
 
 // L'endroit où on va dessiner
 const stage = new Konva.Stage({
@@ -25,7 +22,7 @@ let rubber;
 
 const rubberBandingMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QCcCuAjdZkCECGAdhAJYFQB0xEANmAMQCyA8gKoDKAogMIAyAklwDSAbQAMAXUSgADgHtYxAC7FZBKSAAeiAIwBmUeQBsAFgCsADgBMow9oDshu6bvmANCACeOu3fKnj2oamlo4AnMbGurqGAL4x7miY2PhEpBQQyHgA7mmMrJzMAGocYpJIIHIKyqrqWgjGoqbk4aF6xlaGnaKB7l4I5rrNrbqWraG62trBunEJGFi4hCRk5BnZuczs3PxCpeqVSipq5XXaoeSBxnbWdqGGuhGtvYgDQ3qjZxNTlqZx8SAEWQQODqRILFLLKD7eSHGonRAAWkmhnIlj0oUsEVEtwsoTcnkRg1MonMnVCLkMNgmolCsxAYOSSzSlBoYGhVSOtURhnMqPRmIaOPMeOeCGsvLuXTsAXsokxsX+DMWqRWaxyZHZsOOoDqXwulL0UVs5kuousgxGJuR7VMplCzj+MSAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QCcCuAjdZkCECGAdhAJYFQB0xEANmAMQCyA8gKoDKAogMIAyAklwDSAbQAMAXUSgADgHtYxAC7FZBKSAAeiAMwA2cgE4DogBwAmbdrO6DJgCwmDAVgA0IAJ6IAjAHYn5LzszIN9dUSc7XRMnAF8YtzRMbHwiUgoIZDwAdzTGVk5mADUOMUkkEDkFZVV1LQRtLxNDXV0vUW1baycnXTdPBBbydqdLJ3NWnyDY+JBErFxCEjJyDOzc5nZufiFS9UqlFTVyur1DY3NLa1sHHz7EQeHR8d8g3TiZglkIOHU55MW0nt5AcasdEABaLxefRmLwdYJ2UQ+ZyOEx3BDg2HkMwmPw+Hy6HwWRFIuIJDDzFJLChUWhAqqHWoQqLYuEGBFIlG2dFmUzNFpIuxQnyiYJvGZ-BapZarHJkekgo6gOpi7GIuw9XROAwNRrorwGHzkJxmE287qWIWRd4xIA */
     id: "rubberBanding",
     initial: "idle",
     states: {
@@ -80,18 +77,18 @@ const rubberBandingMachine = createMachine(
 );
 
 // On démarre la machine
-const rubberBandingService = 
-interpret(rubberBandingMachine, { devTools: true })
-  .onTransition((state) => {
-    console.log("Current state:", state.value);
-  })
-  .start();
+const inspector = createBrowserInspector();
+const actor = createActor(rubberBandingMachine,
+    {  inspect: inspector.inspect, }
+);
+
+actor.start();
 
 // On transmet les événements souris à la machine
 stage.on("click", () => {
-  rubberBandingService.send("MOUSECLICK");
+  actor.send({ type: "MOUSECLICK" });
 });
 
 stage.on("mousemove", () => {
-  rubberBandingService.send("MOUSEMOVE");
+  actor.send( {type: "MOUSEMOVE"} );
 });

@@ -1,6 +1,5 @@
 import Konva from "konva";
-import { createMachine, interpret } from "xstate";
-
+import { createMachine, createActor } from 'xstate';
 
 const stage = new Konva.Stage({
     container: "container",
@@ -52,7 +51,7 @@ const polylineMachine = createMachine(
                     MOUSECLICK: [
                         {
                             actions: "addPoint",
-                            cond: "pasPlein",
+                            guard: "pasPlein",
                         },
                         {
                             target: "idle",
@@ -78,7 +77,7 @@ const polylineMachine = createMachine(
                         {
                             target: "manyPoints",
                             actions: "removeLastPoint",
-                            cond: "plusDeDeuxPoints",
+                            guard: "plusDeDeuxPoints",
                             internal: true,
                         },
                         {
@@ -152,22 +151,20 @@ const polylineMachine = createMachine(
         },
     }
 );
+const actor = createActor(polylineMachine);
 
-const polylineService = interpret(polylineMachine)
-    .onTransition((state) => {
-        console.log("Current state:", state.value);
-    })
-    .start();
+actor.start();
 
+// On transmet les événements au statechart
 stage.on("click", () => {
-    polylineService.send("MOUSECLICK");
+    actor.send({type: "MOUSECLICK"});
 });
 
 stage.on("mousemove", () => {
-    polylineService.send("MOUSEMOVE");
+    actor.send({type: "MOUSEMOVE"});
 });
 
 window.addEventListener("keydown", (event) => {
     console.log("Key pressed:", event.key);
-    polylineService.send(event.key);
+    actor.send({type: event.key});
 });

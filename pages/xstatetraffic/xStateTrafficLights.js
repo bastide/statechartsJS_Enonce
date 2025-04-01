@@ -1,8 +1,6 @@
-import { createMachine, interpret } from "xstate";
-import { inspect } from "@xstate/inspect";
-inspect({
-  iframe: () => document.querySelector('iframe[data-xstate]')
-});
+import { createMachine, createActor } from 'xstate';
+import { createBrowserInspector } from '@statelyai/inspect';
+
 // Les sous-états du mode normal
 const normalSubstates = {
   initial: "orange",
@@ -24,6 +22,7 @@ const normalSubstates = {
     },
   },
 };
+
 // Les sous-états du mode maintenance
 const maintenanceSubstates = {
   initial: "orange",
@@ -75,33 +74,47 @@ const resetButton = document.getElementById("reset");
 const goButton = document.getElementById("go");
 const lightsImage = document.getElementById("lights");
 
-const lightService = interpret(lightMachine, { devTools: true })
-  .onTransition((state) => {
+const inspector = createBrowserInspector();
+const actor = createActor(lightMachine,
+    {  inspect: inspector.inspect, }
+);
+
+actor.subscribe((state) => {
     console.log("Current state:", state.value);
     // On change l'image en fonction de l'état
     let image = "/traffic-off.png";
-    if (["maintenance.orange", "normalOperation.orange"].some(state.matches))
-      image = "/traffic-orange.png";
-    if (state.matches("normalOperation.green")) image = "/traffic-green.png";
-    if (state.matches("normalOperation.red"))   image = "/traffic-red.png";
+    switch (true) {
+      case state.matches({maintenance :  'orange'}):
+      case state.matches({normalOperation: 'orange'}):
+        image = "/traffic-orange.png";
+        break;
+      case state.matches({normalOperation: 'green'}):
+        image = "/traffic-green.png";
+        break;
+      case state.matches({normalOperation : 'red'}):
+        image = "/traffic-red.png";
+        break;
+    }
     lightsImage.src = image;
     // On active ou désactive les boutons en fonction de l'état
-    turnOnButton.disabled = !state.can("TURNON");
-    turnOffButton.disabled = !state.can("TURNOFF");
-    resetButton.disabled = !state.can("RESET");
-    goButton.disabled = !state.can("GO");
-  })
-  .start();
+    turnOnButton.disabled = !state.can({type : "TURNON"});
+    turnOffButton.disabled = !state.can({type : "TURNOFF"});
+    resetButton.disabled = !state.can({type : "RESET"});
+    goButton.disabled = !state.can({type: "GO"});
+  });
 
+  actor.start();
+
+// On transmet les événements au statechart
 turnOnButton.addEventListener("click", () => {
-  lightService.send("TURNON");
+  actor.send({ type : "TURNON" });
 });
 turnOffButton.addEventListener("click", () => {
-  lightService.send("TURNOFF");
+  actor.send({ type : "TURNOFF" });
 });
 resetButton.addEventListener("click", () => {
-  lightService.send("RESET");
+  actor.send({ type: "RESET"});
 });
 goButton.addEventListener("click", () => {
-  lightService.send("GO");
+  actor.send({type : "GO"});
 });

@@ -1,12 +1,7 @@
-import { interpret } from "xstate";
-import { inspect } from "@xstate/inspect";
+import { createActor } from 'xstate';
+import { createBrowserInspector } from '@statelyai/inspect';
+
 import { watchMachine } from "./watchMachine";
-
-
-inspect({
-  iframe: () => document.querySelector('iframe[data-xstate]')
-});
-
 
 // Les boutons qui envoient des événements à la machine
 const ESC = document.getElementById("ESC");
@@ -18,33 +13,55 @@ const date = document.getElementById("date");
 const alarm = document.getElementById("alarm");
 const timer = document.getElementById("timer");
 
-const lightService = interpret(watchMachine, { devTools: true })
-  .onTransition((state) => {
-    // console.log("Current state:", state.value);
-    time.style.display = ["NormalMode.Display.Time", "NormalMode.ChangeTime"].some(state.matches) ? "block" : "none";
-    date.style.display = ["NormalMode.Display.Date", "NormalMode.ChangeDate"].some(state.matches) ? "block" : "none";
-    alarm.style.display = ["NormalMode.Display.Alarm", "NormalMode.ChangeAlarm", "Alarm"].some(state.matches) ? "block" : "none";
-    timer.style.display = ["NormalMode.Timer"].some(state.matches) ? "block" : "none";
-  })
-  .onChange((context) => {
-    // console.log("Context:", context);
-    time.textContent = context.currentTime.toFormat("hh:mm:ss");
-    date.textContent = context.currentTime.toFormat("dd/MM/yyyy");
-    alarm.textContent = context.alarmTime.toFormat("hh:mm:ss");
-    timer.textContent = context.timer.toFormat("hh:mm:ss");
-  })
-  .start();
+const inspector = createBrowserInspector();
+const actor = createActor(watchMachine,
+    {  inspect: inspector.inspect, }
+);
+
+actor.subscribe((state) => {
+    console.log("Current state:", state.value);
+    time.style.display = "none";
+    date.style.display = "none";
+    alarm.style.display = "none";
+    timer.style.display = "none";
+    switch (true) {
+        case state.matches({NormalMode: {Display: 'Time'}}):
+        case state.matches({NormalMode: 'ChangeTime'}):
+            time.style.display = "block";
+            break;
+        case state.matches({NormalMode: {Display: 'Date'}}):
+        case state.matches({NormalMode: 'ChangeDate'}):
+            date.style.display = "block";
+            break;
+        case state.matches({NormalMode: {Display: 'Alarm'}}):
+        case state.matches({NormalMode: 'ChangeAlarm'}):
+            alarm.style.display = "block";
+            break;
+        case state.matches({NormalMode: {Display: 'Timer'}}):
+        case state.matches({NormalMode: 'ChangeTimer'}):
+            timer.style.display = "block";
+            break;                
+        default:
+    }
+
+    time.textContent = state.context.currentTime.toFormat("hh:mm:ss");
+    date.textContent = state.context.currentTime.toFormat("dd/MM/yyyy");
+    alarm.textContent = state.context.alarmTime.toFormat("hh:mm:ss");
+    timer.textContent = state.context.timer.toFormat("hh:mm:ss");
+  });
+  
+  actor.start();
 
 ESC.addEventListener("click", () => {
-  lightService.send("ESC");
+    actor.send({ type: "ESC"});
 });
 SET.addEventListener("click", () => {
-  lightService.send("SET");
+    actor.send({ type: "SET"});
 });
 UP.addEventListener("click", () => {
-  lightService.send("UP");
+    actor.send({ type: "UP"});
 });
 
 
 // On envoie le signal d'horloge à la machine toutes les secondes
-setInterval(() => lightService.send("CLOCKTICK") , 1000);
+setInterval(() => actor.send({ type: "CLOCKTICK"}) , 1000);

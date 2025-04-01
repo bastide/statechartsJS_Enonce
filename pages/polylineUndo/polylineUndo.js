@@ -1,5 +1,6 @@
 import Konva from "konva";
-import { createMachine, interpret } from "xstate";
+import { createMachine, createActor } from 'xstate';
+import { createBrowserInspector } from '@statelyai/inspect';
 import Stack from './stack';
 
 class Command {
@@ -117,7 +118,7 @@ const polylineMachine = createMachine(
                     MOUSECLICK: [
                         {
                             actions: "addPoint",
-                            cond: "pasPlein",
+                            guard: "pasPlein",
                         },
                         {
                             target: "idle",
@@ -143,7 +144,7 @@ const polylineMachine = createMachine(
                         {
                             target: "manyPoints",
                             actions: "removeLastPoint",
-                            cond: "plusDeDeuxPoints",
+                            guard: "plusDeDeuxPoints",
                             internal: true,
                         },
                         {
@@ -222,20 +223,23 @@ const undoButton = document.getElementById("undo");
 const redoButton = document.getElementById("redo");
 const undoManager = new UndoManager();
 
-const polylineService = interpret(polylineMachine).start();
+const actor = createActor(polylineMachine);
+actor.start();
 
+// On transmet les événements au statechart
 stage.on("click", () => {
-    polylineService.send("MOUSECLICK");
+    actor.send({type: "MOUSECLICK"});
 });
 
 stage.on("mousemove", () => {
-    polylineService.send("MOUSEMOVE");
+    actor.send({type: "MOUSEMOVE"});
 });
 
 window.addEventListener("keydown", (event) => {
     console.log("Key pressed:", event.key);
-    polylineService.send(event.key);
+    actor.send({type: event.key});
 });
+
 
 undoButton.addEventListener("click", () => {
     undoManager.undo();
