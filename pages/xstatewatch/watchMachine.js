@@ -14,8 +14,8 @@ export const watchMachine = createMachine({
         CLOCKTICK: {
             actions: assign({
                 currentTime: (context, event) => {
-                    console.log("CLOCKTICK");
-                    return context.currentTime.plus({ seconds: 1 });
+                    console.log(context.context);
+                    return context.context.currentTime.plus({ seconds: 1 });
                 },
             }),
         },
@@ -113,7 +113,7 @@ export const watchMachine = createMachine({
                                     actions: assign({
                                         timer: (context, event) => {
                                             console.log("updating Timer seconds");
-                                            return context.timer.plus({ seconds: 1 });
+                                            return context.context.timer.plus({ seconds: 1 });
                                         },
                                     }),
                                     internal: false,
@@ -150,7 +150,7 @@ export const watchMachine = createMachine({
                                     actions: assign({
                                         currentTime: (context, event) => {
                                             console.log("updating Hour");
-                                            return context.currentTime.plus({hours: 1});
+                                            return context.context.currentTime.plus({hours: 1});
                                         },
                                     }),
                                 },
@@ -172,7 +172,7 @@ export const watchMachine = createMachine({
                                     actions: assign({
                                         currentTime: (context, event) => {
                                             console.log("updating Minutes");
-                                            return context.currentTime.plus({
+                                            return context.context.currentTime.plus({
                                                 minutes: 1,
                                             });
                                         },
@@ -201,7 +201,7 @@ export const watchMachine = createMachine({
                                     actions: assign({
                                         currentTime: (context, event) => {
                                             console.log("updating Month");
-                                            return context.currentTime.plus({months: 1});
+                                            return context.context.currentTime.plus({months: 1});
                                         },
                                     }),
                                 },
@@ -223,7 +223,7 @@ export const watchMachine = createMachine({
                                     actions: assign({
                                         currentTime: (context, event) => {
                                             console.log("updating Day");
-                                            return context.currentTime.plus({days: 1});
+                                            return context.context.currentTime.plus({days: 1});
                                         },
                                     }),
                                 },
@@ -250,7 +250,7 @@ export const watchMachine = createMachine({
                                     actions: assign({
                                         alarmTime: (context, event) => {
                                             console.log("updating Alarm hour");
-                                            return context.alarmTime.plus({hours: 1});
+                                            return context.context.alarmTime.plus({hours: 1});
                                         },
                                     }),
                                 },
@@ -272,7 +272,7 @@ export const watchMachine = createMachine({
                                     actions: assign({
                                         alarmTime: (context, event) => {
                                             console.log("updating Timer minutes");
-                                            return context.alarmTime.plus({ minutes: 1});
+                                            return context.context.alarmTime.plus({ minutes: 1});
                                         },
                                     }),
                                 },

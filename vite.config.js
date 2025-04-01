@@ -13,6 +13,7 @@ export default defineConfig({
           statepatternrubber: resolve(__dirname, 'pages/statepatternrubber/index.html'),
           xstaterubber: resolve(__dirname, 'pages/xstaterubber/index.html'),
           xstatepolyline: resolve(__dirname, 'pages/xstatepolyline/index.html'),
+          polylineUndo: resolve(__dirname, 'pages/polylineUndo/index.html'),
         },
       },
       sourcemap: "inline"
