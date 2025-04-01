@@ -91,70 +91,8 @@ const polylineMachine = createMachine(
         initial: "idle",
         states: {
             idle: {
-                on: {
-                    MOUSECLICK: {
-                        target: "onePoint",
-                        actions: "createLine",
-                    },
-                },
             },
-            onePoint: {
-                on: {
-                    MOUSECLICK: {
-                        target: "manyPoints",
-                        actions: "addPoint",
-                    },
-                    MOUSEMOVE: {
-                        actions: "setLastPoint",
-                    },
-                    Escape: { // event.key
-                        target: "idle",
-                        actions: "abandon",
-                    },
-                },
-            },
-            manyPoints: {
-                on: {
-                    MOUSECLICK: [
-                        {
-                            actions: "addPoint",
-                            guard: "pasPlein",
-                        },
-                        {
-                            target: "idle",
-                            actions: ["addPoint", "saveLine"],
-                        },
-                    ],
-
-                    MOUSEMOVE: {
-                        actions: "setLastPoint",
-                    },
-
-                    Escape: {
-                        target: "idle",
-                        actions: "abandon",
-                    },
-
-                    Enter: { // event.key
-                        target: "idle",
-                        actions: "saveLine",
-                    },
-
-                    Backspace: [ // event.key
-                        {
-                            target: "manyPoints",
-                            actions: "removeLastPoint",
-                            guard: "plusDeDeuxPoints",
-                            internal: true,
-                        },
-                        {
-                            target: "onePoint",
-                            actions: "removeLastPoint",
-                        },
-                    ],
-                },
-            },
-        },
+         },
     },
     {
         actions: {
