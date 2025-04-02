@@ -1,6 +1,7 @@
 import Konva from "konva";
 import { createMachine, createActor } from 'xstate';
 
+// L'endroit où le dessin va être affiché
 const stage = new Konva.Stage({
     container: "container",
     width: 400,
@@ -27,6 +28,7 @@ const polylineMachine = createMachine(
             },
         },
     },
+    // Quelques actions et guardes que vous pouvez utiliser dans le statechart
     {
         actions: {
             // Créer une nouvelle polyline
@@ -96,8 +98,8 @@ const polylineMachine = createMachine(
         },
     }
 );
+// On démarre la machine d'état
 const actor = createActor(polylineMachine);
-
 actor.start();
 
 // On transmet les événements au statechart

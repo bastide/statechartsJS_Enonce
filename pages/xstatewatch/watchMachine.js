@@ -2,7 +2,7 @@ import { createMachine, assign } from "xstate";
 import { DateTime, Duration } from "luxon";
 
 export const watchMachine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QBECWVUBcCGAbA6tpgMYAWAxAMIAyA8pQNIAqAkowNoAMAuoqAA4B7WFlSCAdnxAAPRAE4AzJwB0AFgBsC9QEYAHAHYATPv2rd6gDQgAnom2GAvg6toMOAkTLKAcoIBOALZ4ALKCEGDKaLD8uNjW5ACqAApcvEggQiKYYpLpsgjaqtoKypzaAKzq+rrmCnKccvpWtgWcbaX6ZXKqnLrlWuWOziCuWHiEJKQ+-kG4oeGRqNGx1spMqAFg5ACiAMqUqVKZohJS+eUXyuoa14NGCuUVzYj6crrK+uWqCqZ6xuZOFzoMYeSbTQIhMIRKIxOJrDZbXbbJiHdLHbKnPJ2ezPAr1dTKBSFXSqQxaBrqAyAkbA9wTLy+CFzKGLZZw5BELZ7A48I7CE65UDnPrKOTlfEXH7adScJo2RDqdSGNSffRKBQGPSqcrU0Z0zxTRmzebQpaw1YczCI5GogT8jGCmR2TiGXGPbTKR6cIqGQzaEyGWW62njA3g40smErSKc8jSWA4K3KbAAMytfgAFOU2pwAJTkPWhsFGyELKPszm2jL2nJnRAXcpXG7a4xkx7lXH6eyiuqthRFHRVYNuIsMmal01s1YAQVigR2+yr6NrWIQRP0yjbgf01yq2e9nd0JW32eK1x6nB1w0LoLHTJNrPNyln2HnSJRvLRNcxQudrvleKVB81Qat8FQXvow4gvShrjsyZZmtGL7zvGiYRKm6ZZjm+Y3jB4YTo+SFzgES7fo6+TrpuDzbrunxtKouJHiUVTaN6ChEjUCjGFB+rFnBD7rJsfjKLsmCCPw-CQIkKSfnaWQrr+CAALTMUUqhyPYZSUvYZi4qxO7KFq7GGIoPRiqoPGjrB94soJYDCaJ4mSRA5DvqR8k-k6ykVB6SpceUnzisSLp6b0BJmPY9QVPUhi6JZt7WRGCx2Q5YkSVJqGcsmab2RmrHYQWIYJfh8ERClIlpc57kCnWBSkiUZSVNUtT1I0emVASdT9Ox2i9fYnzxXhJalfCQnKAA4oIqDiFA0nVQ6tUqU2hQaYG0q6DpuihYYjZGLK6j7lqeiDWGw0CQiwmTdNs2ZUmGG5fleaFSOxVnbZF0TVNM3zQpXm6Mq7HZqYbxdnochyLibwer1B3ioOGlyOoJ18TZCyUKQ2AzWAdnKOjmMwAAEoIACufiuTasnVh55HYkSpSmT0uiI3IxgQwBhT9IZiMBfU6mDKSyN3klER41jOOi4TJNk8kP2efkbwqHUnBEhp5TmAdbMtIUmhqKZ-Z3G8ciC4lBES9jCK4xjWNE6TcYJll92ZvuT24ad-Esmb4tW5LpOyzTCAyu8sW80YujeqoJh6V2Khiuo+KNMY9HGyVD6exbZvBNNxNWrA5Mfmkck1auvV0w0-aM8zrN6T0ypqkoVQ1xcQbXkVQ3u2j3vm5slv42AmfiNncBzZTy5y3YbaEgFpjZkebT9HpDyNvYrFcYoavK0MQIvW3qMi53Xu9-3g+57d6E5U7BWuyjws92L6ed0fOd+7Vgebkz3qh+Hkfs0FHzL8rzVV7Jzeh3Xulo96HwkJgCgbkR5kVqn1d4nFrhHn6J0GouJFSqFKLKWKLpVDag4sA9uECsbgNvjAUI4hoHDwLlTIuikxQblQRHOo-0dyWAAhcZUFxFAGF+OpJGLdt5u13hQsA5CM5QIoKfbKmFnY4VbqIm+ZtJEP2kc-VcPNDIGDMOvUkO0GIAUpMqcG-Y1QbV9GYOKwjoLKNNp3NRYC4h500YpRByhkFmAeD8XoW1jHFE9N8CxJk2jgxsVvOx18HHOKTKolxMs4HUwQX6OQHw+aym6BqfEboDo9n9OeDUhg44KGIWI+JcTHEuNkY7LCbRFEiOiSNCppCYAcmsG4ry2i9CmD6GHAxXxIbekJG0HcoETJfCNrY3iQsYlY2QgEcRNsyawLoaPf2fUAa9F6vcbhBhQq9E9L0RQXEXQHS0GUlRncFlLKlrQvkyTVyNGhpSV4Xx+hKh2qFPQnjLxHm0I0XprxLlzJgDcs2yy7ZoTkblBRz0omzOadc4itzfZJIYV0t4b96gbQ0p8b4-4tb9hKJKWKVQZRtGuCCpFvdwUPyzjnVx6KFrF16lsja-o2yDH2QBMU7xvRfD9A2Sk1LU7ItfIsjODKh6JLWfA4uE9pRKh2RqVi2pIasTUOxOoDwmI1E3jSRpiKxW0pRVKgejKannzqS7JRTSTXzLNfSi1cBOnnCxcHbZeKvhcT0lYkZfRiicTLhZaZVlnzEShQ7a1cKr5eAWW6uw3wPhHj6GKAFxSTIKD0keT0asp4QV5leYY4goTwHSHG0gDyMX5CUhMq4ZIdqBQ0rpXljZOBKjMLzB49Q1SiqhNWllik60Rwbf5ZtwVCWIHVISAl2pBjSjeAaytKdIyITiIO36+QKgbm1MUCKxgzByhaNqAkatpRKH9J0Hp-aEJTlGmATdY8EAaBUI8W4LMOaDC0J2RG6TigBUij2iJhqEUmxGuWC0nIn3+3QaKf4iMSSNSMS0L42CO29DKGxTQRhb2TifAsmDtVAyNj3f2SxQLDzYJ9QQgF-pWImTww+vwRHVxKQBWkvyTbeGTsYooK4PxewunBoqZddrjXvTGo5dKEBWPDsKIrcGJkJlMI2pwrWPSgk-BqBpPQ1xSlhteiQ5jn1rpya8izQygZfRjI5oQ0KrxDJdlihcNUfpehMfKp5dZi0dJqD2WHOOBC+HbQ3ODf0BCeiDBdExvwYBMCk3EAAfQAO6kHsmAJL1gSapYy+Z7dpJDKCL0JUL4TN1PTvqJ4qxxRWLmHbExtOmx8vyF9ISAMgKbNGE1uPKoy1zDbN3CSRr+97692WS1hAjRFYdYDMYbr7Vrh5vFMZMO-1Bgjd7gfLGj84CTfsG114eKDEK20NXICegfHrRaleSJMzwMOradBr8jzFJM3eEFRoR4NJYf8SevJmHfRvBwzUUNd3w0gNaRIrKUjqFVpezW+QGhPQIxAj9urmDObKvMN66oEdNtkJh1Ulohch1eX-p6JmqrKQHX+pgxUopujFJVr1P5BOwXEUm-UElqOeg6EE39xA-1TGCr9BoKLFzDM7yuaaiVqKWMI7J-LR4KOAWmA7cUCxeleppPMExWU6pDBg9A-d1doDHVy-NcffbgZ0NBuzJUJDU7Wi9V1uKAhJk9MmCY95+V7icTs2qBuVzehkMI2ToRxXW7EARxzTwgcHUlBoeVk4JwQA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QBECWVUBcCGAbA6tpgMYAWAxAMIAyA8pQNIAqAkowNoAMAuoqAA4B7WFlSCAdnxAAPRAA4AjJwB0AFlUBmAJyqFAdj2c5ANgUAmADQgAnonMBfe1bQYcBImWUA5QQCcAtngAsoIQYOQAgrjYAUyo-mBcvEggQiKYYpIpsggKqorKGpxacqpaCjpmpnpWtggaZYVaenmqnC0ArJxmWo7O6Fh4hCSk3n6BuCFhymiw-NHW5ACqAApJUmmiElI5Cua1iGacusodxqbtRgoaenIdfSAug+4jYwHBoWAzqHMLynEJcgAUQAypR1ilNhlttk7AoOh1lC1ipwNB08uctBoDgg5CVlMZOMYOqozNodAjek5HgM3MNPD53pNPt9fthrP94uEQUCmBCBMItllQLtujiNMY5Mo5KiNHI5GS9GZ1MYNA8nnSPKNGRMpl9ZvN2TMiOFQeCeBtBdDhTI4SZlN0Go74WYqsYcUozFLOAi9FoOqV0cYqf1XEMtW9dSyDX9kCbyDy+RbIVbMjs4ZYbIhdFLTB09OozsGzAo5OraeHXjqPtMY0a45hwtJYDhG8psAAzRu+AAUXU4nAAlOQNZWGeMa-qfoaOQ3EsmBek07DcvDEcitKj0apMdis7j0dLOKXN+Y9Krj+Wwy9x0y9ayZ8oojF-MCwfzUqmYSLEOU9Mp-WOORz3zEtihxEwVFKfIDH9PQikUK9nnpbUJ2ZWtpz+Z8AgTXkPyhZcf1yMV91dBVTlJJUNCqcw5T0JDNSrND7zrDlsNfZtWy+Ttuz7AchxHCsb1Qu9o0wo12Pwr8bRyP8AK6GDiSVJQtBxcoVCU6iNDlBVjlUBixxEqNpgBMBfDfc1kkXIV0wQDobgJdFj1uPEzBaVQPWA1RCgRMkjh0JRSQM4TI0nTkEl8ZQQUwQR+H4SBljWBdPyXb9bQQNyzFObS5B0kpjAMd191LdQ1DKAcsVuYkA2ClDQvQr5TMi6LYviiBcKTKyUpsld4WMaU9lLEwJS0coEQ9AsFGlXy+uLDpmlqiNqwa8KzKimK4oSziTXbLszJ7JR+OHUcQuW+8mvW1rICk1KZMQez-2JJR9HlLQ3LyD03u8hQCoKvQOjMfsfUWpjRJMrlIoAcUEVBxCgRKbp6ojMuyuU8pMQqJp0AkJTObRVAMeazBB29jMaiHlGh2H4ZoehmDYBhEetWy0X-O4sVMUllVUAGJqJAknq0Ux5WPMkSaMsLKFIbA4bAUzlClmWYAACUEABXczEyZwj0qKLKWk5zR9GMMpiQ9doppuEwznyRQFXo6kTrqs6WUV2X5bdlX1fM1ZtbS3ZTAAx0SRJc4Azc83yPheCukJUkFTVR2hOd5jXel92uQV9OvY18htrbHj9qB47k6W1Ppk9uXM8r1WNb9u67OaHG-UJLFoK9D1zCy0slXyZVjyKEMaWvFOwa+SuPezsAglhtXG1gDr65Z7okR+1oNGN02OnNktTnOcwAbOPZXXF+r7wn6up5n8Q57gBHkoI-3s0B5RlRMSVz3OQGPP3ZoNCRUogFXSjVysTJOI8y5jyzkrKuCRoGy2vrfBe+duJ7V7MXQSEDQZk3gTASeMDEHzyXiueaj0bhC2KHKdQHdirtERHKQG-oha5R9GA0MyFIE4MrnOXB08JCYAoFrB+0ll6IgqMeCqRQKjARxNVZQ5gLiA3mmUGq4COHYMllPHhlcQjiAEffLqj8G6kimliGCuhbjnjyNvfchJ-wNFtjuaisEyxqMYqTTRMDtFX34RQFBu1eIYKdpwzxstvEEN8cQoiAYpT2RNvCeEx5zg4kMFKSoCJSwlm0ADU+LsK5aJ2tw9ki9hG3VEfI08kjjwlBqPuQw3k26qnIbNfSbjDJnzTl4wpBTFi+1KUjdKP0pTXDeu-AGRQgIpPhKvJU55-rBnOLk8u48CltiKYsfxhd0FHUweojxK0ilrJ6VE9KMTsrxPRF0H6RU6j-XXATI4bQsSuj2EsqBld2K8NrprPC-TmYrj1qvQ2G9zxlFUsVTQbMe5oi9Aic4xg3lcKnp8mu3sDGWjKb1QOm4yQhx3MSUoHp1CxL-vKBJz1XHsPcRLA5yLogBC+WizZaC+IDhLlg-Z586UvkZXXP5OscikJxjKNoIyAaSiJfKAkbkRpt09Ii0JMAUVX1nvPEphiREApXgbdem9Roeh0g6IkjyfQNH9JS4eeyaVcpgcqghqq759I1ZioipJERvy-tc+ylyDVtFfsqEo6g5n5nuG006yzeF2oQQ65BLYdpbNZQJYJGjaW2vpf4XhhC4AnMFU3VUIqB7+iqHIIlJwFRVA3tbeVYa6rsTznGguLKgml1eJJflT87K1LqKWKa+ZFDHDJLlBJobqTiE+PAFIyayAYoGTkAAtJmOo2MlH+XaHmENCqGozv+a6m5hwCj5D0h-QsaNN0sXEnUayO70r-WGfC-yaJ7YpJNmoW4OgZTFrtmesSbIOSmW3QKuwRIVABiJB+0kwYPr7jxP1Yt-F4Xge-RhX9xpGwAY7dcIwhRdAqQmdpIk5tzDSi8mBB5XQ2GWupR05Dj52LoYbjKfq1zjAPvDl2oDyppSSgaBcNExQEU1pCStJq9HbKBQ9KYLQ2GXkVGVKqHJgmU3nQpi1TaEBRO9V5sVUo3dArKgLCSNcSHyYRUpjDOGGmiJyimiw9yJJ8rHD3N2xjAETXit0JKYzyhfBgEwBrcQAB9AA7qQMyYAAvWHVsFsLlnBntBxCWQkAEqI9BbgqAqXmL4JFi7JH+dR5T9R3EcEk1F8oOype0vJKyYH4Nlt8nLdhSSd3IrofTdE3qqiHlO61nSM5wJ0TGhr9QsRIlSXsRQ5RdBOaAwWB0or5pFFMNoTLqywBDfE-uAGKhujSOAtRc4NwVtdKOREvRpAhvaFg0GyURtgzHhSe0Ak-FKpGCxGcI7YTuldMvd1a9uwtP5emc0N+AZtLmFLB9pV6ahs6A9IDLKOKjB3E-lNyHYAo0518OtprxUSRSjuIwpUmU+1o4x9PQbKYXW6xGwYK4PbJvXFLSoQ9FQ0QA3KNpU+dHKezrsCxmzcEqhGBckqTyUoQXw+aCSKqI77BAA */
     context: {
         alarmTime: DateTime.now().plus({ minutes: 2 }),
         currentTime: DateTime.now(),
@@ -106,26 +106,23 @@ export const watchMachine = createMachine({
                                 UP: {
                                     target: "Stopped",
                                 },
-                            },
-                            after: {
-                                1000: {
-                                    target: "Going",
+                                CLOCKTICK: {
                                     actions: assign({
                                         timer: (context, event) => {
                                             console.log("updating Timer seconds");
                                             return context.context.timer.plus({ seconds: 1 });
                                         },
                                     }),
-                                    internal: false,
                                 },
                             },
                         },
-                        on: {
-                            ESC: {
-                                target: "Display",
-                            },
+                    },
+                    on: {
+                        ESC: {
+                            target: "Display",
                         },
-                    },                   
+                    },
+                
                 },
                 return_where_you_were: {
                     history: "deep",
@@ -145,8 +142,7 @@ export const watchMachine = createMachine({
                                     target: "ChangeMinutes",
                                 },
                                 UP: {
-                                    target: "ChangeHour",
-                                    internal: false,
+                                    reenter: true,
                                     actions: assign({
                                         currentTime: (context, event) => {
                                             console.log("updating Hour");
@@ -167,8 +163,7 @@ export const watchMachine = createMachine({
                                     target: "ChangeHour",
                                 },
                                 UP: {
-                                    target: "ChangeMinutes",
-                                    internal: false,
+                                    reenter: true,
                                     actions: assign({
                                         currentTime: (context, event) => {
                                             console.log("updating Minutes");
@@ -183,7 +178,7 @@ export const watchMachine = createMachine({
                     },
                 },
                 ChangeDate: {
-                    initial: "ChangeMonth",
+                    initial: "ChangeDay",
                     states: {
                         ChangeMonth: {
                             after: {
@@ -196,8 +191,7 @@ export const watchMachine = createMachine({
                                     target: "ChangeDay",
                                 },
                                 UP: {
-                                    target: "ChangeMonth",
-                                    internal: false,
+                                    reenter: true,
                                     actions: assign({
                                         currentTime: (context, event) => {
                                             console.log("updating Month");
@@ -218,8 +212,7 @@ export const watchMachine = createMachine({
                                     target: "ChangeMonth",
                                 },
                                 UP: {
-                                    target: "ChangeDay",
-                                    internal: false,
+                                    reenter: true,
                                     actions: assign({
                                         currentTime: (context, event) => {
                                             console.log("updating Day");
@@ -245,8 +238,7 @@ export const watchMachine = createMachine({
                                     target: "ChangeMinutes",
                                 },
                                 UP: {
-                                    target: "ChangeHour",
-                                    internal: false,
+                                    reenter: true,
                                     actions: assign({
                                         alarmTime: (context, event) => {
                                             console.log("updating Alarm hour");
@@ -267,8 +259,7 @@ export const watchMachine = createMachine({
                                     target: "ChangeHour",
                                 },
                                 UP: {
-                                    target: "ChangeMinutes",
-                                    internal: false,
+                                    reenter: true,
                                     actions: assign({
                                         alarmTime: (context, event) => {
                                             console.log("updating Timer minutes");

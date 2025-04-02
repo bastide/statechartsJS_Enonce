@@ -37,8 +37,7 @@ actor.subscribe((state) => {
         case state.matches({NormalMode: 'ChangeAlarm'}):
             alarm.style.display = "block";
             break;
-        case state.matches({NormalMode: {Display: 'Timer'}}):
-        case state.matches({NormalMode: 'ChangeTimer'}):
+        case state.matches({NormalMode: 'Timer'}):
             timer.style.display = "block";
             break;                
         default:
